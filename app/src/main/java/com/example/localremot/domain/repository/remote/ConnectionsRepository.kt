@@ -1,4 +1,4 @@
-package com.example.localremot.domain.repository
+package com.example.localremot.domain.repository.remote
 
 import com.example.localremot.data.common.Resource
 import com.example.localremot.domain.model.GetConnection

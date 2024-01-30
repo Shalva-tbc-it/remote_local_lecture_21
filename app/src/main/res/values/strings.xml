@@ -2,4 +2,7 @@
     <string name="app_name">LocalRemot</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="success_internet">Success Internet</string>
+    <string name="error_internet">Error Internet</string>
+    <string name="not_found_items">Not Found Items</string>
 </resources>

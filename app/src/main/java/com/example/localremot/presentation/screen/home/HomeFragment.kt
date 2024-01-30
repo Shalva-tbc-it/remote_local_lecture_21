@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.localremot.R
 import com.example.localremot.databinding.FragmentHomeBinding
 import com.example.localremot.presentation.event.ConnectionEvent
 import com.example.localremot.presentation.screen.common.base.BaseFragment
@@ -24,7 +24,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun bind() {
         bindAdapter()
-        viewModel.onEvent(ConnectionEvent.FetchConnections)
     }
 
     override fun bindViewActionListeners() {
@@ -32,6 +31,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     override fun bindObserves() {
+        internetPermission()
+    }
+
+    private fun internetOK() {
+
+        viewModel.onEvent(ConnectionEvent.FetchConnections)
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.connectionState.collect {
@@ -40,6 +45,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
     }
+
+    private fun internetNA() {
+
+        viewModel.onEvent(ConnectionEvent.FetchConnectionsFromDb)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.tasks.collect {
+                    if (it.isNotEmpty()) {
+                        adapter.submitList(it)
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.not_found_items), Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun handleConnectionState(state: ConnectionState) {
         binding.progressBar.visibility =
@@ -60,6 +82,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         adapter = ConnectionRecyclerAdapter()
         binding.recycler.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recycler.adapter = adapter
+    }
+
+    private fun internetPermission() {
+        if (viewModel.isInternetAvailable(requireContext())) {
+            internetOK()
+            Toast.makeText(requireContext(),
+                getString(R.string.success_internet),
+                Toast.LENGTH_SHORT).show()
+        } else {
+            internetNA()
+            Toast.makeText(requireContext(),
+                getString(R.string.error_internet),
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

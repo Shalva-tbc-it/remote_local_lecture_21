@@ -6,7 +6,7 @@ import com.example.localremot.data.remote.mapper.base.asResource
 import com.example.localremot.data.remote.mapper.connection.toDomain
 import com.example.localremot.data.remote.service.ConnectionsService
 import com.example.localremot.domain.model.GetConnection
-import com.example.localremot.domain.repository.ConnectionsRepository
+import com.example.localremot.domain.repository.remote.ConnectionsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

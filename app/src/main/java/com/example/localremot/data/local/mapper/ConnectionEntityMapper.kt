@@ -1,18 +1,9 @@
-package com.example.localremot.presentation.mapper
+package com.example.localremot.data.local.mapper
 
+import com.example.localremot.data.local.entity.ConnectionEntity
 import com.example.localremot.domain.model.GetConnection
-import com.example.localremot.presentation.model.Connection
 
-fun GetConnection.toPresentation() =
-    Connection(
-        id = id,
-        cover = cover,
-        price = price,
-        title = title,
-        favorite = favorite
-    )
-
-fun Connection.toDomain() =
+fun ConnectionEntity.toDomain() =
     GetConnection(
         id = id,
         cover = cover,
@@ -20,3 +11,13 @@ fun Connection.toDomain() =
         title = title,
         favorite = favorite
     )
+
+fun GetConnection.toData() =
+    ConnectionEntity(
+        id = id,
+        cover = cover,
+        price = price,
+        title = title,
+        favorite = favorite
+    )
+
