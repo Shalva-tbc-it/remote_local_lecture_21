@@ -1,7 +1,5 @@
 package com.example.localremot.domain.model
 
-import com.squareup.moshi.Json
-
 data class GetConnection(
     val id: Int,
     val cover: String,

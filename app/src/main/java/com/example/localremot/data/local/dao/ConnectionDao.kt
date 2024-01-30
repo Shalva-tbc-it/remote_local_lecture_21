@@ -16,6 +16,4 @@ interface ConnectionDao {
     @Query("SELECT * FROM items")
     fun getAll() : Flow<List<ConnectionEntity>>
 
-
-
 }

@@ -28,13 +28,13 @@ class HomeViewModel @Inject constructor(
     private val getConnectionsUseCase: GetConnectionsUseCase,
     private val getConnectionDbUseCase: GetConnectionDbUseCase,
     private val insertItemDbUseCase: InsertItemDbUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _connectionState = MutableStateFlow(ConnectionState())
     val connectionState: SharedFlow<ConnectionState> = _connectionState.asStateFlow()
 
-    private val _tasks = MutableStateFlow<List<Connection>>(emptyList())
-    val tasks: StateFlow<List<Connection>> get() = _tasks
+    private val _tasks = MutableStateFlow<List<Connection>?>(emptyList())
+    val tasks: StateFlow<List<Connection>?> get() = _tasks
 
     fun onEvent(event: ConnectionEvent) {
         when (event) {
@@ -46,11 +46,10 @@ class HomeViewModel @Inject constructor(
 
     private fun addTask(connection: List<Connection>) {
         viewModelScope.launch {
-            if (connection.isNotEmpty()) {
-                insertItemDbUseCase.invoke(connection.map {
-                    it.toDomain()
-                })
-            }
+            insertItemDbUseCase.invoke(connection.map {
+                it.toDomain()
+            })
+
         }
     }
 
@@ -58,9 +57,14 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             getConnectionDbUseCase.invoke().collect {
-                _tasks.value = it.map { data ->
-                    data.toPresentation()
+                if (it.isNotEmpty()) {
+                    _tasks.value = it.map { data ->
+                        data.toPresentation()
+                    }
+                } else {
+                    _tasks.value = null
                 }
+
             }
         }
     }
@@ -94,7 +98,6 @@ class HomeViewModel @Inject constructor(
     private fun updateErrorMessage(message: String?) {
         _connectionState.update { currentState -> currentState.copy(errorMessage = message) }
     }
-
 
 
     fun isInternetAvailable(context: Context): Boolean {

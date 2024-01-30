@@ -41,7 +41,7 @@ object AppModule {
     @Singleton
     fun provideRetrofitClient(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://run.mocky.io/v3/")
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
                 MoshiConverterFactory.create(

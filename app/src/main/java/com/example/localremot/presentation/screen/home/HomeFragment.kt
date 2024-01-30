@@ -52,10 +52,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.tasks.collect {
-                    if (it.isNotEmpty()) {
-                        adapter.submitList(it)
-                    } else {
+                    if (it == null) {
                         Toast.makeText(requireContext(), getString(R.string.not_found_items), Toast.LENGTH_LONG).show()
+                    } else {
+                        adapter.submitList(it)
                     }
                 }
             }
