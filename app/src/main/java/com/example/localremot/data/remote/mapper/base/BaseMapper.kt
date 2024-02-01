@@ -1,6 +1,6 @@
 package com.example.localremot.data.remote.mapper.base
 
-import com.example.localremot.data.common.Resource
+import com.example.localremot.data.remote.common.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -1,11 +1,14 @@
 package com.example.localremot.di
 
-import com.example.localremot.data.common.HandleResponse
-import com.example.localremot.data.local.repository.ConnectionRepositoryImpl
-import com.example.localremot.data.remote.repository.ConnectionsRepositoryImpl
+import com.example.localremot.data.common.NetworkStatus
+import com.example.localremot.data.local.repository.DbConnectionDataSource
+import com.example.localremot.data.remote.common.HandleResponse
+import com.example.localremot.data.remote.repository.RemoteConnectionsDataSource
 import com.example.localremot.data.remote.service.ConnectionsService
-import com.example.localremot.domain.repository.local.ConnectionRepository
-import com.example.localremot.domain.repository.remote.ConnectionsRepository
+import com.example.localremot.data.repository.GetConnectionsRepositoryImpl
+import com.example.localremot.domain.repository.GetConnectionsRepository
+import com.example.localremot.domain.repository.local.DbConnectionRepository
+import com.example.localremot.domain.repository.remote.RemoteConnectionsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +24,8 @@ class RepositoryModule {
     fun provideConnectionsRepository(
         connectionsService: ConnectionsService,
         handleResponse: HandleResponse
-    ): ConnectionsRepository {
-        return ConnectionsRepositoryImpl(
+    ): RemoteConnectionsRepository {
+        return RemoteConnectionsDataSource(
             connectionsService = connectionsService,
             handleResponse = handleResponse
         )
@@ -30,7 +33,21 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideConnectionRepositoryDb(connectionRepositoryImpl: ConnectionRepositoryImpl) : ConnectionRepository {
-        return connectionRepositoryImpl
+    fun provideConnectionRepositoryDb(connectionDataSource: DbConnectionDataSource) : DbConnectionRepository {
+        return connectionDataSource
+    }
+
+    @Singleton
+    @Provides
+    fun provideConnections(
+        connectionsRepository: RemoteConnectionsRepository,
+        connectionRepository: DbConnectionRepository,
+        networkStatus: NetworkStatus
+    ): GetConnectionsRepository {
+        return GetConnectionsRepositoryImpl(
+            connectionRepository = connectionRepository,
+            connectionsRepository = connectionsRepository,
+            networkStatus = networkStatus
+        )
     }
 }

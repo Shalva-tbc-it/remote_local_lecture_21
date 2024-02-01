@@ -26,7 +26,7 @@ class ConnectionRecyclerAdapter: ListAdapter<Connection, ConnectionRecyclerAdapt
             tvTitle.text = item.title
             Glide.with(binding.root)
                 .load(item.cover)
-                .into(imgGirl)
+                .into(imgItem)
 
         }
 

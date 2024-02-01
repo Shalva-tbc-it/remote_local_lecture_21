@@ -1,13 +1,16 @@
 package com.example.localremot.di
 
+import android.content.Context
 import com.example.localremot.BuildConfig
-import com.example.localremot.data.common.HandleResponse
+import com.example.localremot.data.common.NetworkStatus
+import com.example.localremot.data.remote.common.HandleResponse
 import com.example.localremot.data.remote.service.ConnectionsService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -63,6 +66,12 @@ object AppModule {
     @Provides
     fun provideConnectionsService(retrofit: Retrofit): ConnectionsService {
         return retrofit.create(ConnectionsService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkStatus(@ApplicationContext context: Context): NetworkStatus {
+        return NetworkStatus(context = context)
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.localremot.data.common
+package com.example.localremot.data.remote.common
 
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response

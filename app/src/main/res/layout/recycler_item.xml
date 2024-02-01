@@ -9,7 +9,7 @@
     android:layout_marginStart="25dp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgGirl"
+        android:id="@+id/imgItem"
         android:layout_width="150dp"
         android:layout_height="210dp"
         android:background="@drawable/recyclerview_bg"
@@ -25,8 +25,8 @@
         android:src="@drawable/path"
         android:scaleType="centerInside"
         android:layout_width="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/imgGirl"
-        app:layout_constraintBottom_toBottomOf="@id/imgGirl"
+        app:layout_constraintStart_toStartOf="@id/imgItem"
+        app:layout_constraintBottom_toBottomOf="@id/imgItem"
         android:layout_margin="20dp"
         android:layout_height="wrap_content"/>
 
@@ -38,7 +38,7 @@
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgGirl" />
+        app:layout_constraintTop_toBottomOf="@+id/imgItem" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvPrice"
