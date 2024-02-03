@@ -9,7 +9,8 @@ fun ConnectionEntity.toDomain() =
         cover = cover,
         price = price,
         title = title,
-        favorite = favorite
+        favorite = favorite,
+        category = category ?: ""
     )
 
 fun GetConnection.toData() =
@@ -18,6 +19,7 @@ fun GetConnection.toData() =
         cover = cover,
         price = price,
         title = title,
-        favorite = favorite
+        favorite = favorite,
+        category = category
     )
 

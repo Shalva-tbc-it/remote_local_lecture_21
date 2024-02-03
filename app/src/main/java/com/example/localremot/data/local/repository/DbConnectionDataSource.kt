@@ -27,5 +27,13 @@ class DbConnectionDataSource @Inject constructor(
         }
     }
 
+    override suspend fun getCategory(category: String): Flow<List<GetConnection>> {
+        return connectionDao.getCategory(category = category).map { connectionList ->
+            connectionList.map {
+                it.toDomain()
+            }
+        }
+    }
+
 
 }

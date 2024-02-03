@@ -12,5 +12,7 @@ data class ConnectionDTO(
     @Json(name = "title")
     val title: String,
     @Json(name = "favorite")
-    val favorite: Boolean
+    val favorite: Boolean,
+    @Json(name = "category")
+    var category: String
 )

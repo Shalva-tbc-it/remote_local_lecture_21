@@ -16,4 +16,7 @@ interface ConnectionDao {
     @Query("SELECT * FROM items")
     fun getAll() : Flow<List<ConnectionEntity>>
 
+    @Query("SELECT * FROM items WHERE category is :category ")
+    fun getCategory(category: String): Flow<List<ConnectionEntity>>
+
 }

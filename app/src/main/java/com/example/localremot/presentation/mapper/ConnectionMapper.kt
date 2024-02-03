@@ -9,7 +9,8 @@ fun GetConnection.toPresentation() =
         cover = cover,
         price = price,
         title = title,
-        favorite = favorite
+        favorite = favorite,
+        category = category
     )
 
 fun Connection.toDomain() =
@@ -18,5 +19,6 @@ fun Connection.toDomain() =
         cover = cover,
         price = price,
         title = title,
-        favorite = favorite
+        favorite = favorite,
+        category = category
     )

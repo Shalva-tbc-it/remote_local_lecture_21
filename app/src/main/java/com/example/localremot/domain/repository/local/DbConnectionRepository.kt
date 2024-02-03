@@ -7,4 +7,6 @@ interface DbConnectionRepository {
     suspend fun insertItem(getConnection: List<GetConnection>)
 
     suspend fun getAll() : Flow<List<GetConnection>>
+
+    suspend fun getCategory(category: String) : Flow<List<GetConnection>>
 }

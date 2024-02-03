@@ -24,7 +24,7 @@ class GetConnectionsRepositoryImpl @Inject constructor(
                             emit(resource)
                         }
                         is Resource.Success -> {
-                            connectionRepository.insertItem(resource.data)
+                            connectionRepository.insertItem(resource.data )
                             emit(resource)
                         }
                         is Resource.Error -> {

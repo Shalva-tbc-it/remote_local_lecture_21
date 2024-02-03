@@ -17,5 +17,7 @@ data class ConnectionEntity(
     @ColumnInfo(name = "title")
     var title: String,
     @ColumnInfo(name = "favorite")
-    var favorite: Boolean
+    var favorite: Boolean,
+    @ColumnInfo(name = "category")
+    var category: String? = null
 )
