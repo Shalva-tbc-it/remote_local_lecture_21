@@ -12,8 +12,9 @@ import javax.inject.Inject
 class NetworkStatus @Inject constructor(
      context: Context
 ) : GetNetworkStatus {
-    private val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager = context.getSystemService(
+        Context.CONNECTIVITY_SERVICE
+    ) as ConnectivityManager
 
     private val _networkStatus = MutableStateFlow(false)
     val networkStatus = _networkStatus.asStateFlow()

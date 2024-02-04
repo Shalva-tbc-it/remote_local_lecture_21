@@ -2,23 +2,23 @@ package com.example.localremot.presentation.screen.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.localremot.databinding.RecyclerCategoryBinding
-import com.example.localremot.presentation.model.Category
 
-class CategoryRecyclerAdapter: RecyclerView.Adapter<CategoryRecyclerAdapter.CategoryViewHolder>() {
+class CategoryRecyclerAdapter: ListAdapter<String,CategoryRecyclerAdapter.CategoryViewHolder>(CategoryDiffUtil()) {
 
-    private val categoryList = ArrayList<Category>()
-
-    private var onItemClickListener: ((Category) -> Unit)? = null
+    private var onItemClickListener: ((String) -> Unit)? = null
 
     inner class CategoryViewHolder(private val binding: RecyclerCategoryBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Category) {
-            binding.btnCategory.text = item.category
-
+        fun bind() {
+            val item = currentList[adapterPosition]
+            binding.btnCategory.text = item
         }
 
-        fun getCategory(item: Category) {
+        fun getCategory() {
+            val item = currentList[adapterPosition]
             binding.btnCategory.setOnClickListener {
                 onItemClickListener?.let {
                     it.invoke(item)
@@ -28,15 +28,9 @@ class CategoryRecyclerAdapter: RecyclerView.Adapter<CategoryRecyclerAdapter.Cate
 
     }
 
-    fun setOnItemClickListener(listener: (Category) -> Unit) {
+    fun setOnItemClickListener(listener: (String) -> Unit) {
         onItemClickListener = listener
     }
-
-    fun setData(category: Category) {
-        categoryList.add(category)
-        notifyItemChanged(categoryList.size)
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         return CategoryViewHolder(
@@ -48,15 +42,19 @@ class CategoryRecyclerAdapter: RecyclerView.Adapter<CategoryRecyclerAdapter.Cate
         )
     }
 
-    override fun getItemCount() = categoryList.size
-
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val currentItem = categoryList[position]
-        holder.bind(currentItem)
-        holder.getCategory(currentItem)
+        holder.bind()
+        holder.getCategory()
     }
 
+    class CategoryDiffUtil : DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
 
-
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
+    }
 
 }

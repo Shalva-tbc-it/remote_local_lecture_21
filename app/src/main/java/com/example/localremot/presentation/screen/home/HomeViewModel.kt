@@ -25,21 +25,19 @@ class HomeViewModel @Inject constructor(
     private val _connectionState = MutableStateFlow(ConnectionState())
     val connectionState: SharedFlow<ConnectionState> = _connectionState.asStateFlow()
 
-    private val _getCategory = MutableStateFlow(ConnectionState())
-    val getCategory: SharedFlow<ConnectionState> = _getCategory.asStateFlow()
-
     fun onEvent(event: ConnectionEvent) {
         when (event) {
             is ConnectionEvent.FetchConnections -> fetchConnections()
             is ConnectionEvent.GetCategory -> getCategory(event.category)
             is ConnectionEvent.ResetErrorMessage -> updateErrorMessage(message = null)
+            is ConnectionEvent.SetCategoryMenu -> fetchConnectionByCategory()
         }
     }
 
     private fun getCategory(category: String) {
         viewModelScope.launch {
             getCategoryUseCase.invoke(category).collect {
-                _getCategory.update { state ->
+                _connectionState.update { state ->
                     state.copy(connections = it.map {
                         it.toPresentation()
                     })
@@ -75,6 +73,38 @@ class HomeViewModel @Inject constructor(
                     is Resource.Error -> {
                         updateErrorMessage(message = it.errorMessage)
                     }
+                }
+            }
+        }
+    }
+
+
+    private fun fetchConnectionByCategory() {
+        viewModelScope.launch {
+            connectionsUseCase.invoke().collect { resource ->
+                when (resource) {
+
+                    is Resource.Loading -> _connectionState.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+
+                    is Resource.Success -> {
+                        _connectionState.update { state ->
+                            state.copy(
+                                isLoading = false,
+                                category = resource.data.map {
+                                    it.category
+                                }.distinct()
+                            )
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        updateErrorMessage(resource.errorMessage)
+                    }
+
                 }
             }
         }

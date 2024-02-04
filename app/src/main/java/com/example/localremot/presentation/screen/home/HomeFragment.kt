@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.localremot.databinding.FragmentHomeBinding
 import com.example.localremot.presentation.event.ConnectionEvent
-import com.example.localremot.presentation.model.Category
 import com.example.localremot.presentation.screen.common.base.BaseFragment
 import com.example.localremot.presentation.screen.home.adapter.CategoryRecyclerAdapter
 import com.example.localremot.presentation.screen.home.adapter.ConnectionRecyclerAdapter
@@ -35,20 +34,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun bindObserves() {
         viewModel.onEvent(ConnectionEvent.FetchConnections)
+        viewModel.onEvent(ConnectionEvent.SetCategoryMenu)
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.connectionState.collect {
                     handleConnectionState(it)
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getCategory.collect { state ->
-
-                    state.connections?.let { item ->
-                        adapterConnection.submitList(item)
-                    }
                 }
             }
         }
@@ -57,7 +47,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun adapterListener() {
         adapterCategory.setOnItemClickListener(
             listener = {
-                viewModel.onEvent(ConnectionEvent.GetCategory(it.category))
+                viewModel.onEvent(ConnectionEvent.GetCategory(it))
             }
         )
     }
@@ -68,19 +58,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         state.connections?.let {
             adapterConnection.submitList(it)
+        }
 
-            val uniqueCategories = HashSet<String>()
-            it.forEach { connection ->
-                if (uniqueCategories.add(connection.category)) {
-                    adapterCategory.setData(
-                        Category(
-                            id = connection.id,
-                            category = connection.category
-                        )
-                    )
-                }
-            }
-
+        state.category?.let {
+            adapterCategory.submitList(it)
         }
 
         state.errorMessage?.let {
